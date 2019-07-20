@@ -1,0 +1,26 @@
+{
+  "name": "federationgateway",
+  "version": "1.0.0",
+  "description": "Apollo Federation Gateway to SocialBroker services",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "NODE_ENV=prod node .",
+    "dev": "ts-node src/index.ts"
+  },
+  "author": "Glen Burchfield",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jsonwebtoken": "^8.3.2",
+    "@types/node": "^12.6.8",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "@apollo/gateway": "^0.7.1",
+    "apollo-server-express": "^2.7.0",
+    "express": "^4.17.1",
+    "graphql": "^14.4.2",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
