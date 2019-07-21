@@ -17,8 +17,7 @@ const gateway = new ApolloGateway({
                     request.http.headers.set('user-id', _id)
                     request.http.headers.set('user-email', email)
                     request.http.headers.set('user-username', username)
-                    request.http.headers.set('user-issuedAt', issuedAt)
-
+                    request.http.headers.set('user-issuedat', issuedAt)
                 }
             },
         });
