@@ -1,11 +1,26 @@
 import config from './config'
+import { Service } from "./config";
 import express from 'express'
 import { ApolloServer } from "apollo-server-express";
 import { ApolloGateway, RemoteGraphQLDataSource } from "@apollo/gateway";
 import { authenticate, VerifiedUser } from "./utils";
 
+const buildServicesList = () => {
+    let servicesList: Array<Service> = []
+    let services_string_array = config.services_string.split(" ")
+    services_string_array.forEach(service => {
+        let service_array = service.split("::")
+        servicesList.push({
+            name: service_array[0],
+            url: service_array[1]
+        })
+    })
+    console.log(servicesList)
+    return servicesList
+}
+
 const gateway = new ApolloGateway({
-    serviceList: config.services,
+    serviceList: buildServicesList(),
     buildService({ name, url }) {
         return new RemoteGraphQLDataSource({
             url,
@@ -27,7 +42,7 @@ const gateway = new ApolloGateway({
 const server = new ApolloServer({
     gateway,
     context: ({req}) => {
-        const token = req.headers.authorization || null;
+        const token = (req.headers.authorization !== null && req.headers.authorization !== 'null') ? req.headers.authorization : null;
         const user = authenticate(token)
         return { user }
     },
@@ -40,3 +55,4 @@ server.applyMiddleware({app})
 app.listen({ port: config.port }, () =>
     console.log(`🚀 Server ready at http://localhost:${config.port}${server.graphqlPath}`)
 );
+

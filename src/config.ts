@@ -3,8 +3,9 @@ const environment = process.env.NODE_ENV || 'dev'
 
 let config: ConfigParent = {
     dev: {
-        port: 8080,
-        secret:"development_secret",
+        port: parseInt(process.env.PORT),
+        secret:process.env.SECRET_KEY,
+        services_string: process.env.SERVICES_STRING,
         services: [
             {
                 name: "Authentication",
@@ -17,8 +18,9 @@ let config: ConfigParent = {
         ]
     },
     prod: {
-        port: 8080,
+        port: parseInt(process.env.PORT),
         secret: process.env.SECRET_KEY,
+        services_string: process.env.SERVICES_STRING,
         services: [
             {
                 name: "Authentication",
@@ -42,11 +44,12 @@ interface ConfigParent {
 
 interface Config {
     port: number,
-    secret: string
+    secret: string,
+    services_string: string,
     services: Array<Service>
 }
 
-interface Service {
+export interface Service {
     name: string,
     url: string
 }
