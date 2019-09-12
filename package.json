@@ -11,16 +11,16 @@
   "author": "Glen Burchfield",
   "license": "ISC",
   "devDependencies": {
-    "@types/jsonwebtoken": "^8.3.2",
-    "@types/node": "^12.6.8",
+    "@types/jsonwebtoken": "^8.3.3",
+    "@types/node": "^12.7.5",
     "ts-node": "^8.3.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.6.3"
   },
   "dependencies": {
-    "@apollo/gateway": "^0.7.1",
-    "apollo-server-express": "^2.7.0",
+    "@apollo/gateway": "^0.10.4",
+    "apollo-server-express": "^2.9.3",
     "express": "^4.17.1",
-    "graphql": "^14.4.2",
+    "graphql": "^14.5.4",
     "jsonwebtoken": "^8.5.1"
   }
 }

@@ -28,14 +28,19 @@ const gateway = new ApolloGateway({
                 // @ts-ignore
                 if(context.user){
                     // @ts-ignore
-                    let { _id, email, username, issuedAt } = context.user
-                    request.http.headers.set('user-id', _id)
-                    request.http.headers.set('user-email', email)
-                    request.http.headers.set('user-username', username)
-                    request.http.headers.set('user-issuedat', issuedAt)
+                    request.http.headers.set('user', JSON.stringify(context.user))
+                    // @ts-ignore
+                    // let { _id, email, username, issuedAt } = context.user
+                    // request.http.headers.set('user-id', _id)
+                    // request.http.headers.set('user-email', email)
+                    // request.http.headers.set('user-username', username)
+                    // request.http.headers.set('user-issuedat', issuedAt)
                 }
             },
         });
+    },
+    introspectionHeaders: {
+        'introspection': 'true'
     }
 })
 
