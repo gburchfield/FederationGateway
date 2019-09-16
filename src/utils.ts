@@ -12,6 +12,7 @@ export const authenticate = (token:string) => {
                 _id: verifiedToken._id,
                 email: verifiedToken.email,
                 username: verifiedToken.username,
+                roles: verifiedToken.roles,
                 issuedAt: issued
             }
             return user
@@ -27,5 +28,6 @@ export interface VerifiedUser {
     _id: string,
     email: string,
     username: string,
+    roles: [string],
     issuedAt?: Date
 }
