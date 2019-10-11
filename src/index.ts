@@ -1,63 +1,24 @@
-import config from './config'
-import { Service } from "./config";
-import express from 'express'
-import { ApolloServer } from "apollo-server-express";
-import { ApolloGateway, RemoteGraphQLDataSource } from "@apollo/gateway";
-import { authenticate, VerifiedUser } from "./utils";
+import dotenv from 'dotenv'
+import {GatewayNodeConfig} from "socialbrokernode/dist/lib/Types";
+import {SocialBrokerNode} from "socialbrokernode/dist/lib/SocialBrokerNode";
+dotenv.config()
 
-const buildServicesList = () => {
-    let servicesList: Array<Service> = []
-    let services_string_array = config.services_string.split(" ")
-    services_string_array.forEach(service => {
-        let service_array = service.split("::")
-        servicesList.push({
-            name: service_array[0],
-            url: service_array[1]
-        })
-    })
-    console.log(servicesList)
-    return servicesList
-}
 
-const gateway = new ApolloGateway({
-    serviceList: buildServicesList(),
-    buildService({ name, url }) {
-        return new RemoteGraphQLDataSource({
-            url,
-            willSendRequest({ request, context }) {
-                // @ts-ignore
-                if(context.user){
-                    // @ts-ignore
-                    request.http.headers.set('user', JSON.stringify(context.user))
-                    // @ts-ignore
-                    // let { _id, email, username, issuedAt } = context.user
-                    // request.http.headers.set('user-id', _id)
-                    // request.http.headers.set('user-email', email)
-                    // request.http.headers.set('user-username', username)
-                    // request.http.headers.set('user-issuedat', issuedAt)
-                }
-            },
-        });
-    },
-    introspectionHeaders: {
-        'introspection': 'true'
-    }
-})
+const gatewayConfig: GatewayNodeConfig = {
+    port: process.env.PORT,
+    secret: process.env.SECRET_KEY,
+    services: [
+        {
+            name: "Authentication",
+            url: "http://authentication_service:4001/graphql"
+        },
+        {
+            name: "Profile",
+            url: "http://profile_service:4002/graphql"
+        }
+    ]
+};
 
-const server = new ApolloServer({
-    gateway,
-    context: ({req}) => {
-        const token = (req.headers.authorization !== null && req.headers.authorization !== 'null') ? req.headers.authorization : null;
-        const user = authenticate(token)
-        return { user }
-    },
-    subscriptions: false
-})
+const MySocialBrokerGateway: SocialBrokerNode = new SocialBrokerNode(gatewayConfig);
 
-const app = express()
-server.applyMiddleware({app})
-
-app.listen({ port: config.port }, () =>
-    console.log(`🚀 Server ready at http://localhost:${config.port}${server.graphqlPath}`)
-);
-
+MySocialBrokerGateway.start();
